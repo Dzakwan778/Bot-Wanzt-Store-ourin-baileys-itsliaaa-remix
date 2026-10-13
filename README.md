@@ -1,6 +1,50 @@
 # Wanzt Store WhatsApp Bot Engine & Management Dashboard
 
+<p align="left">
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
+</p>
+
 Sistem manajemen bot WhatsApp resmi untuk **wanztstore.web.id**, dirancang untuk menangani operasional pemesanan otomatis, display katalog interaktif, pengiriman kartu produk horizontal (carousel), hingga koneksi soket real-time menggunakan pairing code custom alfanumerik.
+
+---
+
+## 📊 GitHub Stats:
+
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=WanMa2&show_icons=true&theme=dark&rank_icon=circle" alt="Wan Ma2 GitHub Stats" />
+  <br />
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=WanMa2&theme=dark" alt="GitHub Streak" />
+  <br />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=WanMa2&layout=compact&theme=dark" alt="Most Used Languages" />
+</div>
+
+<details>
+<summary><b>Lihat Ringkasan Statistik Text</b></summary>
+
+### 📈 Wan Ma2's GitHub Stats
+- **Total Stars Earned**: 0
+- **Total Commits**: 71
+- **Total PRs**: 1
+- **Total Issues**: 7
+- **Contributed to (last year)**: 0
+- **Grade**: `C`
+
+### 🔥 Contributions & Streak
+- **Total Contributions**: 116 *(Nov 24, 2021 - Present)*
+- **Current Streak**: 3 *(Oct 11 - Oct 13)*
+- **Longest Streak**: 6 *(Jun 12 - Jun 17)*
+
+### 💻 Most Used Languages
+- 🟡 **JavaScript**: 70.35%
+- 🔵 **TypeScript**: 28.99%
+- 🟣 **CSS**: 0.29%
+- ⚫ **Hack**: 0.26%
+- 🔴 **HTML**: 0.09%
+- 🔷 **PHP**: 0.01%
+
+</details>
 
 ---
 
