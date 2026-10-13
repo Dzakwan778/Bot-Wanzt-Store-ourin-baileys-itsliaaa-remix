@@ -13,11 +13,11 @@ Sistem manajemen bot WhatsApp resmi untuk **wanztstore.web.id**, dirancang untuk
 ## 📊 GitHub Stats:
 
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=WanMa2&show_icons=true&theme=dark&rank_icon=circle" alt="Wan Ma2 GitHub Stats" />
+  <img src="https://github-readme-stats.vercel.app/api?username=Dzakwan778&show_icons=true&theme=dark&rank_icon=circle" alt="Wan Ma2 GitHub Stats" />
   <br />
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=WanMa2&theme=dark" alt="GitHub Streak" />
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=Dzakwan778&theme=dark" alt="GitHub Streak" />
   <br />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=WanMa2&layout=compact&theme=dark" alt="Most Used Languages" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Dzakwan778&layout=compact&theme=dark" alt="Most Used Languages" />
 </div>
 
 <details>
