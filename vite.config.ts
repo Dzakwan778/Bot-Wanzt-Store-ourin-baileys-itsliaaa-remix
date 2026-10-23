@@ -1,8 +1,9 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
 import path from 'path';
 import fs from 'fs';
+import { defineConfig } from 'vite';
+
 import { botManager } from './server/botManager.ts';
 
 export default defineConfig(() => {
@@ -30,6 +31,7 @@ export default defineConfig(() => {
                 res.end(JSON.stringify({ pictures }));
                 return;
               }
+
               if (req.method === 'GET' && req.url.startsWith('/api/media/view')) {
                 const urlObj = new URL(req.url, 'http://localhost');
                 const filename = urlObj.searchParams.get('name');
@@ -60,6 +62,7 @@ export default defineConfig(() => {
               res.setHeader('Content-Type', 'application/json');
               const apiKey = botManager.config.xavieraApiKey?.trim();
               const baseUrl = (botManager.config.xavieraBaseUrl?.trim() || 'https://xavierastore.com/api/v1').replace(/\/+$/, '');
+
               if (!apiKey) {
                 res.end(JSON.stringify({
                   configured: false,
@@ -108,6 +111,7 @@ export default defineConfig(() => {
               res.setHeader('Content-Type', 'application/json');
               const apiKey = botManager.config.xavieraApiKey?.trim();
               const baseUrl = (botManager.config.xavieraBaseUrl?.trim() || 'https://xavierastore.com/api/v1').replace(/\/+$/, '');
+
               if (!apiKey) {
                 res.end(JSON.stringify({
                   configured: false,
@@ -151,6 +155,102 @@ export default defineConfig(() => {
               return;
             }
 
+            if (req.url?.startsWith('/api/xaviera/smm')) {
+              res.setHeader('Content-Type', 'application/json');
+              const apiKey = botManager.config.xavieraApiKey?.trim();
+              const baseUrl = (botManager.config.xavieraBaseUrl?.trim() || 'https://xavierastore.com/api/v1').replace(/\/+$/, '');
+
+              if (!apiKey) {
+                res.end(JSON.stringify({
+                  configured: false,
+                  message: 'API Key belum diisi di tab Connection'
+                }));
+                return;
+              }
+
+              try {
+                const response = await fetch(`${baseUrl}/smm/services`, {
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Accept': 'application/json'
+                  }
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                  res.end(JSON.stringify({
+                    configured: true,
+                    success: false,
+                    status: response.status,
+                    error: data.error || 'Gagal memuat layanan SMM dari Xaviera API'
+                  }));
+                  return;
+                }
+
+                res.end(JSON.stringify({
+                  configured: true,
+                  success: true,
+                  data: data
+                }));
+              } catch (err: any) {
+                res.end(JSON.stringify({
+                  configured: true,
+                  success: false,
+                  error: err?.message || 'Gagal terhubung ke server Xaviera'
+                }));
+              }
+              return;
+            }
+
+            if (req.url?.startsWith('/api/xaviera/games')) {
+              res.setHeader('Content-Type', 'application/json');
+              const apiKey = botManager.config.xavieraApiKey?.trim();
+              const baseUrl = (botManager.config.xavieraBaseUrl?.trim() || 'https://xavierastore.com/api/v1').replace(/\/+$/, '');
+
+              if (!apiKey) {
+                res.end(JSON.stringify({
+                  configured: false,
+                  message: 'API Key belum diisi di tab Connection'
+                }));
+                return;
+              }
+
+              try {
+                const response = await fetch(`${baseUrl}/games`, {
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Accept': 'application/json'
+                  }
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                  res.end(JSON.stringify({
+                    configured: true,
+                    success: false,
+                    status: response.status,
+                    error: data.error || 'Gagal memuat game dari Xaviera API'
+                  }));
+                  return;
+                }
+
+                res.end(JSON.stringify({
+                  configured: true,
+                  success: true,
+                  data: data
+                }));
+              } catch (err: any) {
+                res.end(JSON.stringify({
+                  configured: true,
+                  success: false,
+                  error: err?.message || 'Gagal terhubung ke server Xaviera'
+                }));
+              }
+              return;
+            }
+
             if (!req.url?.startsWith('/api/bot')) {
               return next();
             }
@@ -159,6 +259,12 @@ export default defineConfig(() => {
 
             if (req.method === 'GET' && req.url === '/api/bot/status') {
               res.end(JSON.stringify(botManager.getStatus()));
+              return;
+            }
+
+            if (req.method === 'GET' && req.url === '/api/bot/groups') {
+              const result = await botManager.getParticipatingGroups();
+              res.end(JSON.stringify(result));
               return;
             }
 
@@ -190,6 +296,18 @@ export default defineConfig(() => {
                   if (req.url === '/api/bot/save-config') {
                     botManager.saveConfig(data);
                     res.end(JSON.stringify({ success: true, config: botManager.config }));
+                    return;
+                  }
+
+                  if (req.url === '/api/bot/groups/toggle') {
+                    const { groupId, enabled } = data;
+                    if (!groupId) {
+                      res.statusCode = 400;
+                      res.end(JSON.stringify({ error: 'groupId diperlukan' }));
+                      return;
+                    }
+                    const updatedToggles = botManager.setGroupToggle(groupId, Boolean(enabled));
+                    res.end(JSON.stringify({ success: true, groupId, enabled: Boolean(enabled), toggles: updatedToggles }));
                     return;
                   }
 

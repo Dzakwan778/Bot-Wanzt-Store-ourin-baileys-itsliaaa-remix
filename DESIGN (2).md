@@ -4,8 +4,11 @@
 
 ---
 
-### PRINSIP DESAIN UTAMA (ANTI-AI SLOP)
-Sebagian besar template dashboard modern buatan AI terlihat seragam ("AI Slop") dengan ciri khas: gradien ungu/pink berlebihan, efek neon *glow* buram, sudut terlalu melengkung (*pill button* berlebihan), dan spasi kosong yang tidak fungsional. Dashboard ini dirancang dengan prinsip **Industrial Utility & Editorial Minimalism**:
+## 🎯 PRINSIP DESAIN UTAMA (ANTI-AI SLOP)
+
+Sebagian besar template dashboard modern buatan AI terlihat seragam ("AI Slop") dengan ciri khas: gradien ungu/pink berlebihan, efek neon *glow* buram, sudut terlalu melengkung (*pill button* berlebihan), dan spasi kosong yang tidak fungsional.
+
+Dashboard ini dirancang dengan prinsip **Industrial Utility & Editorial Minimalism**:
 1. **Fokus pada Data & Kecepatan**: Informasi penting (Status Bot, Saldo Xaviera, Live Transaksi) dapat dibaca dalam waktu kurang dari 2 detik.
 2. **Palet Warna Netral & Elegan**: Menggunakan warna monokrom slate/zinc dengan satu warna aksen fungsional (*clean blue / emerald* untuk status sukses).
 3. **Tipografi Tajam & Hirarki Jelas**: Menggunakan font sans-serif modern (Inter / Plus Jakarta Sans) dengan font monospace khusus untuk nominal harga, kode SKU, dan Serial Number.
@@ -13,9 +16,9 @@ Sebagian besar template dashboard modern buatan AI terlihat seragam ("AI Slop") 
 
 ---
 
-### PALET WARNA (COLOR SYSTEM)
+## 🎨 PALET WARNA (COLOR SYSTEM)
 
-#### Mode Terang (Light Mode - Primary Default):
+### Mode Terang (Light Mode - Primary Default):
 - **Background Utama (Canvas)**: `#F8FAFC` (Slate 50)
 - **Permukaan Kartu / Surface**: `#FFFFFF` (Pure White)
 - **Garis Batas (Borders & Dividers)**: `#E2E8F0` (Slate 200 - tipis 1px)
@@ -26,7 +29,7 @@ Sebagian besar template dashboard modern buatan AI terlihat seragam ("AI Slop") 
 - **Indikator Peringatan (Pending / QR Issued)**: `#D97706` (Amber 600) & `#FFFBEB` (Amber 50 BG)
 - **Indikator Bahaya (Disconnected / Failed)**: `#DC2626` (Red 600) & `#FEF2F2` (Red 50 BG)
 
-#### Mode Gelap (Dark Mode - Opsional):
+### Mode Gelap (Dark Mode - Opsional):
 - **Background Utama**: `#0B0F19` (Deep Charcoal)
 - **Permukaan Kartu**: `#111827` (Gray 900)
 - **Garis Batas**: `#1F2937` (Gray 800)
@@ -35,7 +38,7 @@ Sebagian besar template dashboard modern buatan AI terlihat seragam ("AI Slop") 
 
 ---
 
-### TIPOGRAFI & SISTEM SKALA
+## 📐 TIPOGRAFI & SISTEM SKALA
 
 | Elemen | Ukuran Font | Ketebalan (Weight) | Karakteristik |
 |---|---|---|---|
@@ -49,21 +52,21 @@ Sebagian besar template dashboard modern buatan AI terlihat seragam ("AI Slop") 
 
 ---
 
-### STRUKTUR TATA LETAK & RESPONSIBILITAS
+## 📱 STRUKTUR TATA LETAK & RESPONSIBILITAS
 
-#### 1. Tampilan Mobile (< 640px)
+### 1. Tampilan Mobile (< 640px)
 - **Header Atas Kompak**: Logo `wanztstore`, indikator status bot (titik hijau/merah berdenyut), dan tombol hamburger menu.
 - **Kartu Metrik Geser / Stack**: Kartu saldo Xaviera dan status bot ditata vertikal rapat dengan padding 12px.
 - **Transaksi Berbasis Kartu**: Pada layar ponsel, tabel transaksi otomatis berubah format menjadi *list card* per transaksi agar tidak perlu scroll horizontal berlebihan.
 - **Target Sentuh Jempol**: Semua tombol aksi memiliki tinggi minimal 42px - 44px dengan radius 8px-10px untuk kemudahan navigasi jempol.
 
-#### 2. Tampilan Tablet (640px - 1024px)
+### 2. Tampilan Tablet (640px - 1024px)
 - **Grid Adaptif 2 Kolom**:
   * Kolom kiri: Kontrol WhatsApp Bot & form custom pairing code.
   * Kolom kanan: Saldo Xaviera & statistik transaksi hari ini.
 - **Tabel Transaksi**: Menampilkan 5 kolom esensial dengan tombol expand untuk melihat rincian SN / Kredensial.
 
-#### 3. Tampilan Desktop (> 1024px)
+### 3. Tampilan Desktop (> 1024px)
 - **Sidebar Navigasi Ramping (240px)**:
   * Brand Logo: `wanztstore.web.id`
   * Navigasi: Dashboard, WhatsApp Bot, Transaksi Live, Katalog Produk Xaviera, Pengaturan Gateway.
@@ -74,9 +77,9 @@ Sebagian besar template dashboard modern buatan AI terlihat seragam ("AI Slop") 
 
 ---
 
-### KOMPONEN ANTARMUKA (UI COMPONENTS)
+## 🧩 KOMPONEN ANTARMUKA (UI COMPONENTS)
 
-#### 1. WhatsApp Connection Panel
+### 1. WhatsApp Connection Panel
 - Tampilan kartu bersih dengan header: `WhatsApp Connection`.
 - Badge status real-time:
   * `● CONNECTED` (Pill hijau lembut, border tipis hijau).
@@ -87,19 +90,19 @@ Sebagian besar template dashboard modern buatan AI terlihat seragam ("AI Slop") 
   * Tombol aksi primer: `[Minta Kode Pairing]`.
   * Display Box Kode Pairing: Ditampilkan besar di tengah dengan tombol `[Salin Kode]` 1-klik.
 
-#### 2. Saldo Xaviera Card
+### 2. Saldo Xaviera Card
 - Menampilkan logo resmi penyedia + Label `Saldo Xaviera Store`.
 - Angka saldo berukuran besar (misal: `Rp 485.000`) dengan tombol reload kecil di sampingnya.
 - Riwayat ringkas penggunaan saldo terakhir.
 
-#### 3. Live Transactions Table
+### 3. Live Transactions Table
 - Header tabel minimalis warna abu-abu tipis tanpa garis tebal yang mengganggu mata.
 - Status transaksi berupa badge warna terstandarisasi:
   * `PAID` (Hijau) | `PENDING` (Kuning) | `EXPIRED` (Abu-abu)
   * `SUCCESS` (Hijau) | `FAILED` (Merah)
 - Kolom Kredensial / Serial Number: Menggunakan blok monospace yang bisa disalin (*copy-to-clipboard*) dengan sekali klik.
 
-#### 4. Modular Gateway Settings Panel
+### 4. Modular Gateway Settings Panel
 - Tampilan pemilihan provider bertipe tab / radio card:
   `[Paydisini]` | `[Tripay]` | `[Tokopay]` | `[Midtrans]`
 - Input dinamis:
@@ -109,8 +112,9 @@ Sebagian besar template dashboard modern buatan AI terlihat seragam ("AI Slop") 
 
 ---
 
-### PANDUAN PENGALAMAN PENGGUNA (UX DETAILS)
+## ✨ PANDUAN PENGALAMAN PENGGUNA (UX DETAILS)
+
 1. **Zero Confusion**: Setiap form memiliki teks bantuan (*helper text*) singkat di bawah input.
 2. **Toast Feedback**: Notifikasi muncul di pojok kanan bawah selama 3 detik saat data berhasil disimpan atau teks berhasil disalin.
 3. **Empty States Bermakna**: Jika belum ada transaksi, tampilkan ilustrasi garis minimalis dengan teks *"Belum ada transaksi masuk hari ini"* tanpa ruang kosong yang canggung.
-4. **Keamanan Visual**: Kunci API dan rahasia webhook disamarkan secara default (`••••••••`) dengan tombol intip (*eye icon*).
+4. **Keamanan Visual**: Kunci API dan rahasia webhook disamarkan secara default (`••••••••••••`) dengan tombol intip (*eye icon*).
