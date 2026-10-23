@@ -62,16 +62,28 @@ Aplikasi ini mengatur bot WhatsApp toko otomatis dengan fitur:
 15. **Pembersihan Tombol Default Menu & Nilai Awal Store Info**:
     - Seluruh tombol bawaan menu (`menuButtons`) pada file `database/command_menu.json`, `commands_config.json`, dan `server/config/configManager.ts` telah dikosongkan.
     - Nilai default `storeInfo` pada `database/store_info.json` dan `server/config/configManager.ts` telah dikosongkan.
-16. **Penghapusan Kartu Catatan Teknis Penautan**:
-    - Kotak informasi "Catatan Teknis Penautan" di bawah terminal konsol soket (`src/components/terminal/LiveTerminal.tsx`) telah dihapus.
+17. **Ekstraksi Logika Bisnis & State ke Custom React Hooks**:
+    - Seluruh state management dan fungsi API yang sebelumnya menumpuk di `App.tsx` telah dipisahkan ke dalam 5 dedicated custom hooks di `src/hooks/`:
+      - `useBotConnection.ts`: Manajemen koneksi WhatsApp bot, pairing code, dan polling socket.
+      - `useXavieraData.ts`: Manajemen data integrasi Xaviera API (profil, produk, SMM, game).
+      - `useWhatsAppGroups.ts`: Manajemen whitelist grup WhatsApp dan toggle izin bot.
+      - `useStoreConfig.ts`: Manajemen konfigurasi template command, media, dan sinkronisasi server.
+      - `useButtonModal.ts`: Manajemen form modal tambah/edit tombol WhatsApp native flow.
+    - File `src/App.tsx` berhasil dipadatkan hingga hanya tersisa ~340 baris yang bersih dan sangat mudah dikembangkan.
 
 ---
 
-## 📂 Struktur Folder Komponen Baru
+## 📂 Struktur Folder Proyek Modular
 ```
 src/
 ├── types/
 │   └── dashboard.types.ts
+├── hooks/
+│   ├── useBotConnection.ts
+│   ├── useXavieraData.ts
+│   ├── useWhatsAppGroups.ts
+│   ├── useStoreConfig.ts
+│   └── useButtonModal.ts
 ├── components/
 │   ├── layout/
 │   │   ├── Navbar.tsx
