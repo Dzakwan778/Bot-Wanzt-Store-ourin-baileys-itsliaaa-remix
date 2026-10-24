@@ -276,8 +276,13 @@ export default defineConfig(() => {
                   const data = body ? JSON.parse(body) : {};
 
                   if (req.url === '/api/bot/start') {
-                    const result = await botManager.start(data.phoneNumber, data.customCode);
-                    res.end(JSON.stringify(result));
+                    try {
+                      const result = await botManager.start(data.phoneNumber, data.customCode);
+                      res.end(JSON.stringify(result));
+                    } catch (startErr: any) {
+                      res.statusCode = 400;
+                      res.end(JSON.stringify({ error: startErr?.message || 'Gagal memulai penautan bot' }));
+                    }
                     return;
                   }
 

@@ -16,14 +16,8 @@ import { StoreProfileHeader } from './components/layout/StoreProfileHeader';
 import { WhatsAppConnectionPanel } from './components/connection/WhatsAppConnectionPanel';
 import { LiveTerminal } from './components/terminal/LiveTerminal';
 
-// Tab components
-import { TabStoreInfo } from './components/tabs/TabStoreInfo';
-import { TabCommand } from './components/tabs/TabCommand';
-import { TabProduk } from './components/tabs/TabProduk';
-import { TabSsm } from './components/tabs/TabSsm';
-import { TabTopUp } from './components/tabs/TabTopUp';
-import { TabConnection } from './components/tabs/TabConnection';
-import { TabGrup } from './components/tabs/TabGrup';
+// Tab Renderer component
+import { TabContentRenderer } from './components/tabs/TabContentRenderer';
 
 // Modal components
 import { AddEditButtonModal } from './components/modals/AddEditButtonModal';
@@ -113,11 +107,11 @@ export default function App() {
             <div className="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
               {/* Tab Navigation Bar */}
               <div className="border-b border-slate-200 bg-slate-50/70 px-2 sm:px-4 flex items-center gap-1 overflow-x-auto scrollbar-none">
-                {['Store Info', 'Command', 'Produk', 'SSM', 'Top Up', 'Grup', 'tab05', 'Connection'].map(
+                {['Store Info', 'Command', 'Produk', 'SMM', 'Top Up', 'Grup', 'tab05', 'Connection'].map(
                   (tabName) => {
                     const isActive =
                       selectedTab === tabName ||
-                      (tabName === 'SSM' && selectedTab === 'tab02') ||
+                      (tabName === 'SMM' && selectedTab === 'tab02') ||
                       (tabName === 'Top Up' && selectedTab === 'tab03') ||
                       (tabName === 'Grup' && (selectedTab === 'tab04' || selectedTab === 'Grup'));
                     return (
@@ -140,173 +134,15 @@ export default function App() {
 
               {/* Tab Content Body */}
               <div className="p-4 sm:p-5">
-                {selectedTab === 'Store Info' ? (
-                  <TabStoreInfo
-                    storeInfo={storeConfig.storeInfo}
-                    setStoreInfo={storeConfig.setStoreInfo}
-                    isSavingConfig={storeConfig.isSavingConfig}
-                    onSave={() => storeConfig.syncConfigToServer({ storeInfo: storeConfig.storeInfo })}
-                    showToast={showToast}
-                  />
-                ) : selectedTab === 'Command' ? (
-                  <TabCommand
-                    selectedCommand={storeConfig.selectedCommand}
-                    setSelectedCommand={storeConfig.setSelectedCommand}
-                    menuOutputText={storeConfig.menuOutputText}
-                    setMenuOutputText={storeConfig.setMenuOutputText}
-                    menuFooterText={storeConfig.menuFooterText}
-                    setMenuFooterText={storeConfig.setMenuFooterText}
-                    includeMedia={storeConfig.includeMedia}
-                    setIncludeMedia={storeConfig.setIncludeMedia}
-                    selectedPicture={storeConfig.selectedPicture}
-                    setSelectedPicture={storeConfig.setSelectedPicture}
-                    availablePictures={storeConfig.availablePictures}
-                    setAvailablePictures={storeConfig.setAvailablePictures}
-                    menuButtons={storeConfig.menuButtons}
-                    onOpenAddButtonModal={buttonModal.handleOpenAddButtonModal}
-                    onEditButton={buttonModal.handleEditButton}
-                    onDeleteButton={buttonModal.handleDeleteButton}
-                    onSaveMenu={() =>
-                      storeConfig.syncConfigToServer(
-                        storeConfig.menuOutputText,
-                        storeConfig.menuButtons,
-                        storeConfig.listOutputText,
-                        storeConfig.includeMedia,
-                        storeConfig.selectedPicture
-                      )
-                    }
-                    listOutputText={storeConfig.listOutputText}
-                    setListOutputText={storeConfig.setListOutputText}
-                    listFooterText={storeConfig.listFooterText}
-                    setListFooterText={storeConfig.setListFooterText}
-                    onSaveList={() =>
-                      storeConfig.syncConfigToServer(
-                        storeConfig.menuOutputText,
-                        storeConfig.menuButtons,
-                        storeConfig.listOutputText,
-                        storeConfig.includeMedia,
-                        storeConfig.selectedPicture,
-                        xaviera.xavieraApiKey,
-                        xaviera.xavieraBaseUrl,
-                        storeConfig.carouselOutputText,
-                        storeConfig.carouselPicture,
-                        storeConfig.storeInfo,
-                        storeConfig.menuFooterText,
-                        storeConfig.listFooterText
-                      )
-                    }
-                    carouselOutputText={storeConfig.carouselOutputText}
-                    setCarouselOutputText={storeConfig.setCarouselOutputText}
-                    carouselFooterText={storeConfig.carouselFooterText}
-                    setCarouselFooterText={storeConfig.setCarouselFooterText}
-                    carouselPicture={storeConfig.carouselPicture}
-                    setCarouselPicture={storeConfig.setCarouselPicture}
-                    onSaveCarousel={() =>
-                      storeConfig.syncConfigToServer(
-                        storeConfig.menuOutputText,
-                        storeConfig.menuButtons,
-                        storeConfig.listOutputText,
-                        storeConfig.includeMedia,
-                        storeConfig.selectedPicture,
-                        xaviera.xavieraApiKey,
-                        xaviera.xavieraBaseUrl,
-                        storeConfig.carouselOutputText,
-                        storeConfig.carouselPicture,
-                        storeConfig.storeInfo,
-                        storeConfig.menuFooterText,
-                        storeConfig.listFooterText,
-                        storeConfig.carouselFooterText
-                      )
-                    }
-                    storeInfo={storeConfig.storeInfo}
-                    isSavingConfig={storeConfig.isSavingConfig}
-                    showToast={showToast}
-                  />
-                ) : selectedTab === 'Produk' ? (
-                  <TabProduk
-                    productsList={xaviera.productsList}
-                    loadingProducts={xaviera.loadingProducts}
-                    productSearch={xaviera.productSearch}
-                    setProductSearch={xaviera.setProductSearch}
-                    selectedProductCategory={xaviera.selectedProductCategory}
-                    setSelectedProductCategory={xaviera.setSelectedProductCategory}
-                    onRefreshProducts={xaviera.fetchXavieraProducts}
-                    showToast={showToast}
-                  />
-                ) : selectedTab === 'SSM' || selectedTab === 'tab02' ? (
-                  <TabSsm
-                    smmList={xaviera.smmList}
-                    smmSearch={xaviera.smmSearch}
-                    setSmmSearch={xaviera.setSmmSearch}
-                    smmPage={xaviera.smmPage}
-                    setSmmPage={xaviera.setSmmPage}
-                    smmItemsPerPage={xaviera.smmItemsPerPage}
-                    setSmmItemsPerPage={xaviera.setSmmItemsPerPage}
-                    selectedSmmCategory={xaviera.selectedSmmCategory}
-                    setSelectedSmmCategory={xaviera.setSelectedSmmCategory}
-                    loadingSmm={xaviera.loadingSmm}
-                    fetchXavieraSmm={xaviera.fetchXavieraSmm}
-                    showToast={showToast}
-                  />
-                ) : selectedTab === 'Top Up' || selectedTab === 'tab03' ? (
-                  <TabTopUp
-                    topUpList={xaviera.topUpList}
-                    topUpSearch={xaviera.topUpSearch}
-                    setTopUpSearch={xaviera.setTopUpSearch}
-                    topUpPage={xaviera.topUpPage}
-                    setTopUpPage={xaviera.setTopUpPage}
-                    topUpItemsPerPage={xaviera.topUpItemsPerPage}
-                    setTopUpItemsPerPage={xaviera.setTopUpItemsPerPage}
-                    selectedTopUpCategory={xaviera.selectedTopUpCategory}
-                    setSelectedTopUpCategory={xaviera.setSelectedTopUpCategory}
-                    loadingTopUp={xaviera.loadingTopUp}
-                    fetchXavieraGames={xaviera.fetchXavieraGames}
-                    showToast={showToast}
-                  />
-                ) : selectedTab === 'Connection' || selectedTab === 'tab06' ? (
-                  <TabConnection
-                    xavieraApiKey={xaviera.xavieraApiKey}
-                    setXavieraApiKey={xaviera.setXavieraApiKey}
-                    xavieraBaseUrl={xaviera.xavieraBaseUrl}
-                    setXavieraBaseUrl={xaviera.setXavieraBaseUrl}
-                    showApiKey={xaviera.showApiKey}
-                    setShowApiKey={xaviera.setShowApiKey}
-                    isSavingConfig={storeConfig.isSavingConfig}
-                    syncConfigToServer={storeConfig.syncConfigToServer}
-                    menuOutputText={storeConfig.menuOutputText}
-                    menuButtons={storeConfig.menuButtons}
-                    listOutputText={storeConfig.listOutputText}
-                    includeMedia={storeConfig.includeMedia}
-                    selectedPicture={storeConfig.selectedPicture}
-                    showToast={showToast}
-                  />
-                ) : selectedTab === 'Grup' || selectedTab === 'tab04' ? (
-                  <TabGrup
-                    groups={groupsData.groups}
-                    groupSearchQuery={groupsData.groupSearchQuery}
-                    setGroupSearchQuery={groupsData.setGroupSearchQuery}
-                    isLoadingGroups={groupsData.isLoadingGroups}
-                    groupsError={groupsData.groupsError}
-                    togglingGroupId={groupsData.togglingGroupId}
-                    copiedGroupId={groupsData.copiedGroupId}
-                    fetchGroups={groupsData.fetchGroups}
-                    handleToggleGroup={groupsData.handleToggleGroup}
-                    copyGroupIdToClipboard={groupsData.copyGroupIdToClipboard}
-                    botStatus={botConn.botData.status}
-                  />
-                ) : (
-                  <div className="py-8 px-4 text-center space-y-2">
-                    <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 text-slate-500 mx-auto flex items-center justify-center font-mono font-bold text-xs">
-                      {selectedTab}
-                    </div>
-                    <h4 className="text-sm font-semibold text-slate-800">
-                      Tab: {selectedTab}
-                    </h4>
-                    <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
-                      Slot tab ini telah disiapkan untuk penambahan modul atau fitur berikutnya.
-                    </p>
-                  </div>
-                )}
+                <TabContentRenderer
+                  selectedTab={selectedTab}
+                  storeConfig={storeConfig}
+                  xaviera={xaviera}
+                  groupsData={groupsData}
+                  buttonModal={buttonModal}
+                  botConn={botConn}
+                  showToast={showToast}
+                />
               </div>
             </div>
           </div>
@@ -347,8 +183,8 @@ export default function App() {
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>&copy; wanztstore.web.id • Minimalist Admin Dashboard</span>
-          <span className="text-slate-400">Filosofi: Clean Utility &amp; Anti-AI Slop</span>
+          <span>&copy; Bot WhatsApp Dashboard</span>
+          <span className="text-slate-400">Manage Your WhatsApp Bot &amp; Be Smart</span>
         </div>
       </footer>
 

@@ -70,8 +70,18 @@ export function useBotConnection(
     }
 
     const code = customCode.trim().toUpperCase();
+    if (!code) {
+      showToast('Form pairing code belum diisi! Silakan isi kolom kode pairing (8 karakter huruf/angka) untuk melakukan koneksi.');
+      return;
+    }
+
+    if (/[^A-Z0-9]/.test(code)) {
+      showToast('Custom pairing code tidak sesuai! Dilarang menggunakan simbol atau spasi (hanya angka dan huruf saja).');
+      return;
+    }
+
     if (code.length !== 8) {
-      showToast('Custom pairing code wajib tepat 8 karakter.');
+      showToast(`Custom pairing code tidak sesuai! Wajib tepat 8 karakter (saat ini ${code.length} karakter).`);
       return;
     }
 
@@ -120,7 +130,8 @@ export function useBotConnection(
   };
 
   const handleCopyCode = () => {
-    const code = botData.pairingCode || customCode || 'WANZTSTR';
+    const code = botData.pairingCode || customCode || '';
+    if (!code) return;
     navigator.clipboard.writeText(code);
     setCopied(true);
     showToast(`Kode ${code} berhasil disalin ke clipboard!`);

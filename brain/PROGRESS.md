@@ -70,6 +70,22 @@ Aplikasi ini mengatur bot WhatsApp toko otomatis dengan fitur:
       - `useStoreConfig.ts`: Manajemen konfigurasi template command, media, dan sinkronisasi server.
       - `useButtonModal.ts`: Manajemen form modal tambah/edit tombol WhatsApp native flow.
     - File `src/App.tsx` berhasil dipadatkan hingga hanya tersisa ~340 baris yang bersih dan sangat mudah dikembangkan.
+18. **Pembersihan Default Custom Pairing Code**:
+    - Nilai `DEFAULT_CUSTOM_CODE` pada `server/types/bot.types.ts` dan `server/botManager.ts` telah diubah menjadi string kosong (`''`).
+    - Seluruh fallback teks statis `WANZTSTR` pada form, tombol submit, dan kotak display kode pairing telah dihapus sehingga input kode pairing benar-benar kosong secara default.
+19. **Pemisahan Tab Content Renderer & Penciutan `App.tsx` ke 200 Baris**:
+    - Seluruh routing percabangan konten tab (`<TabStoreInfo>`, `<TabCommand>`, `<TabProduk>`, dll.) dipisahkan ke `src/components/tabs/TabContentRenderer.tsx`.
+    - Tidak ada lagi logika bisnis, fetch, atau percabangan tab yang menumpuk di `App.tsx`.
+    - `src/App.tsx` berkurang drastis dari 4.381 baris (awalnya) menjadi **200 baris** murni sebagai root layout dan hook orchestrator.
+20. **Validasi & Pesan Peringatan Custom Pairing Code**:
+    - **Pesan Kolom Kosong**: Menampilkan pesan peringatan berwarna kuning (amber) langsung di bawah kolom form dan toast jika pairing code belum diisi (`Form pairing code belum diisi! Silakan isi kolom kode pairing (8 karakter huruf/angka) untuk melakukan koneksi.`).
+    - **Pesan Simbol Dilarang**: Menampilkan pesan error berwarna merah (rose) jika input mengandung simbol atau spasi (`Custom pairing code tidak sesuai! Dilarang menggunakan simbol atau spasi (hanya angka dan huruf saja).`).
+    - **Pesan Panjang Karakter**: Menghitung karakter secara real-time dan menampilkan pesan jika panjang belum tepat 8 karakter (`Custom pairing code tidak sesuai! Wajib tepat 8 karakter (saat ini X karakter).`).
+    - **Konfirmasi Valid**: Menampilkan pesan hijau saat tepat 8 karakter alfanumerik.
+    - Validasi diterapkan berlapis di UI (`WhatsAppConnectionPanel.tsx`), hook client (`useBotConnection.ts`), serta backend (`server/botManager.ts` & `vite.config.ts`).
+21. **State Tombol Nonaktif & Berwarna Abu-Abu**:
+    - Tombol permintaan kode pairing (`Minta Kode Pairing`) otomatis dinonaktifkan (`disabled={true}`) dan berubah menjadi warna abu-abu (`bg-slate-200 text-slate-400 border border-slate-300 cursor-not-allowed`) selama kode pairing kosong, belum mencapai 8 karakter, atau mengandung simbol.
+    - Tombol hanya akan aktif dan berwarna biru langit (`bg-sky-600 hover:bg-sky-700 text-white cursor-pointer`) setelah pengguna mengisi tepat 8 karakter kombinasi huruf dan angka tanpa simbol.
 
 ---
 
@@ -93,6 +109,7 @@ src/
 │   ├── terminal/
 │   │   └── LiveTerminal.tsx
 │   ├── tabs/
+│   │   ├── TabContentRenderer.tsx
 │   │   ├── TabStoreInfo.tsx
 │   │   ├── TabCommand.tsx
 │   │   ├── TabProduk.tsx

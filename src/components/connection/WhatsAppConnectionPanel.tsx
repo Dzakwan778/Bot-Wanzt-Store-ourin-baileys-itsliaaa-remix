@@ -2,6 +2,7 @@ import React, { FormEvent } from 'react';
 import {
   Smartphone,
   CheckCircle2,
+  AlertCircle,
   Play,
   Clock,
   Square,
@@ -40,6 +41,12 @@ export const WhatsAppConnectionPanel: React.FC<WhatsAppConnectionPanelProps> = (
   onReset,
   onCopyCode,
 }) => {
+  const trimmedCode = customCode.trim().toUpperCase();
+  const isEmpty = trimmedCode.length === 0;
+  const hasSymbol = /[^A-Z0-9]/.test(trimmedCode);
+  const isExact8Chars = trimmedCode.length === 8;
+  const isValidCode = !isEmpty && !hasSymbol && isExact8Chars;
+
   return (
     <div className="space-y-6">
       {/* Kartu Form Koneksi */}
@@ -83,41 +90,145 @@ export const WhatsAppConnectionPanel: React.FC<WhatsAppConnectionPanelProps> = (
 
           {/* Input Custom Pairing Code */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Custom Pairing Code (8 Karakter)
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700">
+                Custom Pairing Code <span className="text-rose-500 font-bold">*Wajib Diisi</span>
+              </label>
+              <span
+                className={`text-[11px] font-mono font-semibold px-2 py-0.5 rounded border transition-colors ${
+                  isEmpty
+                    ? 'bg-amber-50 text-amber-700 border-amber-200'
+                    : hasSymbol
+                    ? 'bg-rose-100 text-rose-700 border-rose-300'
+                    : isExact8Chars
+                    ? 'bg-emerald-100 text-emerald-700 border-emerald-300'
+                    : 'bg-sky-50 text-sky-700 border-sky-200'
+                }`}
+              >
+                {hasSymbol ? 'Simbol Terdeteksi' : `${trimmedCode.length}/8 Karakter`}
+              </span>
+            </div>
             <div className="flex items-center gap-2">
               <input
                 type="text"
                 maxLength={8}
                 value={customCode}
                 onChange={(e) => setCustomCode(e.target.value.toUpperCase())}
-                placeholder=""
+                placeholder="Contoh: 12AB34CD"
                 disabled={loading || botData.status === 'connected'}
-                className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2.5 text-sm font-mono font-bold text-sky-800 tracking-widest focus:outline-none focus:bg-white focus:border-sky-600 focus:ring-2 focus:ring-sky-600/20 uppercase transition shadow-2xs"
+                className={`w-full rounded-lg px-3 py-2.5 text-sm font-mono font-bold tracking-widest focus:outline-none focus:ring-2 uppercase transition shadow-2xs border ${
+                  hasSymbol
+                    ? 'bg-rose-50/30 border-rose-400 text-rose-900 focus:bg-white focus:border-rose-600 focus:ring-rose-500/20'
+                    : isExact8Chars
+                    ? 'bg-emerald-50/20 border-emerald-400 text-emerald-900 focus:bg-white focus:border-emerald-600 focus:ring-emerald-500/20'
+                    : isEmpty
+                    ? 'bg-slate-50 border-amber-300 text-slate-800 focus:bg-white focus:border-amber-500 focus:ring-amber-500/20'
+                    : 'bg-slate-50 border-slate-300 text-sky-800 focus:bg-white focus:border-sky-600 focus:ring-sky-600/20'
+                }`}
               />
-              <span className="text-xs px-2.5 py-2 rounded-lg bg-slate-100 border border-slate-200 text-slate-600 font-mono font-medium shrink-0">
+              <span
+                className={`text-xs px-2.5 py-2 rounded-lg border font-mono font-medium shrink-0 ${
+                  isExact8Chars && !hasSymbol
+                    ? 'bg-emerald-50 border-emerald-300 text-emerald-700 font-bold'
+                    : 'bg-slate-100 border-slate-200 text-slate-600'
+                }`}
+              >
                 8 Chars
               </span>
             </div>
-            <p className="text-[11px] text-slate-500 mt-1.5">
-              Kode alfanumerik tepat 8 karakter untuk dimasukkan di WhatsApp ponsel.
-            </p>
+
+            {/* Pesan Validasi Status Form Pairing Code */}
+            <div className="mt-2 space-y-1">
+              {isEmpty && (
+                <div className="flex items-start gap-2 p-2.5 rounded-lg bg-amber-50/90 border border-amber-200 text-xs text-amber-800 animate-in fade-in duration-150">
+                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-amber-900">Form Pairing Code Belum Diisi</p>
+                    <p className="text-[11px] text-amber-700 mt-0.5 leading-relaxed">
+                      Kolom ini wajib diisi untuk melakukan koneksi ke WhatsApp. Masukkan 8 karakter alfanumerik (hanya angka dan huruf saja, tanpa simbol).
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {hasSymbol && (
+                <div className="flex items-start gap-2 p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-800 animate-in fade-in duration-150">
+                  <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-rose-900">Custom Pairing Code Tidak Sesuai</p>
+                    <p className="text-[11px] text-rose-700 mt-0.5 leading-relaxed">
+                      Dilarang menggunakan simbol atau spasi! Syarat utamanya adalah hanya boleh terdiri dari kombinasi <strong>angka (0-9)</strong> dan <strong>huruf (A-Z)</strong> saja.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {!isEmpty && !hasSymbol && !isExact8Chars && (
+                <div className="flex items-start gap-2 p-2.5 rounded-lg bg-sky-50 border border-sky-200 text-xs text-sky-800 animate-in fade-in duration-150">
+                  <AlertCircle className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-sky-900">Panjang Karakter Belum Sesuai</p>
+                    <p className="text-[11px] text-sky-700 mt-0.5 leading-relaxed">
+                      Syarat utamanya adalah wajib tepat <strong>8 karakter</strong> alfanumerik. Saat ini baru {trimmedCode.length} karakter (kurang {8 - trimmedCode.length} karakter lagi).
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {isValidCode && (
+                <div className="flex items-start gap-2 p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 animate-in fade-in duration-150">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-emerald-900">Format Pairing Code Sesuai</p>
+                    <p className="text-[11px] text-emerald-700 mt-0.5 leading-relaxed">
+                      Kode <span className="font-mono font-bold tracking-wider">{trimmedCode}</span> telah memenuhi syarat (8 karakter angka dan huruf tanpa simbol). Siap digunakan untuk koneksi.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Tombol Aksi */}
           <div className="pt-2 space-y-2">
             <button
               type="submit"
-              disabled={loading || botData.status === 'connecting' || botData.status === 'connected'}
-              className="w-full py-2.5 px-4 rounded-lg font-semibold text-sm text-white bg-sky-600 hover:bg-sky-700 active:scale-[0.99] transition shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+              disabled={
+                loading ||
+                botData.status === 'connecting' ||
+                botData.status === 'connected' ||
+                !isValidCode
+              }
+              className={`w-full py-2.5 px-4 rounded-lg font-semibold text-sm transition flex items-center justify-center gap-2 ${
+                botData.status === 'connected'
+                  ? 'bg-emerald-600 text-white cursor-default opacity-90 shadow-xs'
+                  : loading || botData.status === 'connecting'
+                  ? 'bg-sky-600 text-white opacity-70 cursor-wait shadow-xs'
+                  : !isValidCode
+                  ? 'bg-slate-200 text-slate-400 border border-slate-300 cursor-not-allowed select-none shadow-none'
+                  : 'bg-sky-600 hover:bg-sky-700 text-white cursor-pointer active:scale-[0.99] shadow-xs'
+              }`}
             >
-              {loading ? (
-                <Clock className="w-4 h-4 animate-spin" />
+              {loading || botData.status === 'connecting' ? (
+                <Clock className="w-4 h-4 animate-spin text-white" />
               ) : (
-                <Play className="w-4 h-4 fill-current" />
+                <Play
+                  className={`w-4 h-4 fill-current ${
+                    !isValidCode && botData.status !== 'connected' ? 'text-slate-400' : 'text-white'
+                  }`}
+                />
               )}
-              {botData.status === 'connected' ? 'WhatsApp Bot Telah Terhubung' : 'Minta Kode Pairing (WANZTSTR)'}
+              {botData.status === 'connected'
+                ? 'WhatsApp Bot Telah Terhubung'
+                : loading || botData.status === 'connecting'
+                ? 'Menghubungkan...'
+                : isEmpty
+                ? 'Minta Kode Pairing (Wajib Isi Kode)'
+                : hasSymbol
+                ? 'Minta Kode Pairing (Dilarang Simbol)'
+                : !isExact8Chars
+                ? `Minta Kode Pairing (${trimmedCode.length}/8 Karakter)`
+                : `Minta Kode Pairing (${trimmedCode})`}
             </button>
 
             <div className="flex items-center gap-2">
@@ -162,7 +273,7 @@ export const WhatsAppConnectionPanel: React.FC<WhatsAppConnectionPanelProps> = (
               Ketik kode ini di aplikasi WhatsApp ponsel Anda:
             </span>
             <div className="text-3xl sm:text-4xl font-extrabold font-mono tracking-widest text-slate-900 select-all py-1">
-              {botData.pairingCode || customCode || 'WANZTSTR'}
+              {botData.pairingCode || customCode || '-'}
             </div>
             <button
               onClick={onCopyCode}
@@ -194,7 +305,7 @@ export const WhatsAppConnectionPanel: React.FC<WhatsAppConnectionPanelProps> = (
               <li>
                 Ketikkan 8 karakter kode:{' '}
                 <strong className="font-mono text-slate-900 bg-slate-100 px-1 py-0.5 rounded border border-slate-200">
-                  {botData.pairingCode || customCode || 'WANZTSTR'}
+                  {botData.pairingCode || customCode || '-'}
                 </strong>
               </li>
             </ol>

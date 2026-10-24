@@ -33,7 +33,7 @@ export const StoreProfileHeader: React.FC<StoreProfileHeaderProps> = ({
             </div>
             <div className="flex items-center gap-2">
               <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
-                {storeInfo.storeName || 'Wanzt Store'}
+                {storeInfo.storeName || ''}
               </h1>
               <BadgeCheck className="w-4 h-4 text-sky-600 shrink-0" />
             </div>

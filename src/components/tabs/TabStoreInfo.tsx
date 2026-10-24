@@ -80,7 +80,7 @@ export const TabStoreInfo: React.FC<TabStoreInfoProps> = ({
               type="text"
               value={storeInfo.storeName}
               onChange={(e) => setStoreInfo({ ...storeInfo, storeName: e.target.value })}
-              placeholder="Contoh: Wanzt Store"
+              placeholder="Contoh: Acumalaka Store"
               className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-sky-600 focus:ring-2 focus:ring-sky-600/20 shadow-2xs font-medium"
             />
             <p className="text-[10px] text-slate-500 mt-1">Nama resmi toko/brand yang akan ditampilkan ke pelanggan.</p>
@@ -99,7 +99,7 @@ export const TabStoreInfo: React.FC<TabStoreInfoProps> = ({
               type="text"
               value={storeInfo.ownerName}
               onChange={(e) => setStoreInfo({ ...storeInfo, ownerName: e.target.value })}
-              placeholder="Contoh: Wanzt"
+              placeholder="Contoh: Udin"
               className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-sky-600 focus:ring-2 focus:ring-sky-600/20 shadow-2xs font-medium"
             />
             <p className="text-[10px] text-slate-500 mt-1">Nama pemilik atau penanggung jawab toko.</p>
@@ -118,7 +118,7 @@ export const TabStoreInfo: React.FC<TabStoreInfoProps> = ({
               type="text"
               value={storeInfo.ownerNumber}
               onChange={(e) => setStoreInfo({ ...storeInfo, ownerNumber: e.target.value })}
-              placeholder="Contoh: 6282173515807"
+              placeholder="Contoh: 6281234567890"
               className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 font-mono focus:outline-none focus:border-sky-600 focus:ring-2 focus:ring-sky-600/20 shadow-2xs"
             />
             <p className="text-[10px] text-slate-500 mt-1">Nomor WhatsApp owner (diawali kode negara 62 atau 08).</p>
@@ -148,7 +148,7 @@ export const TabStoreInfo: React.FC<TabStoreInfoProps> = ({
                 type="text"
                 value={storeInfo.adminName || ''}
                 onChange={(e) => setStoreInfo({ ...storeInfo, adminName: e.target.value })}
-                placeholder="Admin Store"
+                placeholder="Yudi Admin"
                 className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-sky-600 focus:ring-2 focus:ring-sky-600/20 shadow-2xs"
               />
             </div>
@@ -161,7 +161,7 @@ export const TabStoreInfo: React.FC<TabStoreInfoProps> = ({
                 type="text"
                 value={storeInfo.adminNumber || ''}
                 onChange={(e) => setStoreInfo({ ...storeInfo, adminNumber: e.target.value })}
-                placeholder="6285712439395"
+                placeholder="628234567890"
                 className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 font-mono focus:outline-none focus:border-sky-600 focus:ring-2 focus:ring-sky-600/20 shadow-2xs"
               />
             </div>
@@ -180,7 +180,7 @@ export const TabStoreInfo: React.FC<TabStoreInfoProps> = ({
               type="text"
               value={storeInfo.webLink || ''}
               onChange={(e) => setStoreInfo({ ...storeInfo, webLink: e.target.value })}
-              placeholder="https://wanztstore.web.id"
+              placeholder="https://xaviera.com"
               className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 font-mono focus:outline-none focus:border-sky-600 focus:ring-2 focus:ring-sky-600/20 shadow-2xs"
             />
           </div>
@@ -196,7 +196,7 @@ export const TabStoreInfo: React.FC<TabStoreInfoProps> = ({
                 type="text"
                 value={storeInfo.telegramBot || ''}
                 onChange={(e) => setStoreInfo({ ...storeInfo, telegramBot: e.target.value })}
-                placeholder="@wanztstore_bot"
+                placeholder="@anustore_bot"
                 className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 font-mono focus:outline-none focus:border-sky-600 focus:ring-2 focus:ring-sky-600/20 shadow-2xs"
               />
             </div>

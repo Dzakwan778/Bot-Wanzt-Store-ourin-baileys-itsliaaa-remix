@@ -83,7 +83,7 @@ Wanzt Store menyediakan sistem klaim otomatis untuk refund maupun klaim garansi 
 
 ## ⚡ Fitur Utama Bot & Dashboard
 
-- **Custom Pairing Code (8 Karakter)**: Penautan bot langsung ke nomor WhatsApp menggunakan kode alfanumerik kustom (default: `WANZTSTR` / `WANZT888`) tanpa perlu scan QR.
+- **Custom Pairing Code (8 Karakter)**: Penautan bot langsung ke nomor WhatsApp menggunakan kode alfanumerik kustom 8 karakter pilihan Anda tanpa perlu scan QR.
 - **Auto Reconnect Handshake**: Menangani siklus status `restartRequired (515)` WhatsApp secara otomatis saat verifikasi kode di smartphone selesai.
 - **Pesan Interaktif Native Flow**: Menu utama interaktif dengan dukungan beragam tipe tombol:
   - `quick_reply` (Balas cepat pemicu aksi)
@@ -136,7 +136,7 @@ Untuk mempermudah pemeliharaan (*maintenance*) dan mencegah penumpukan ribuan ba
 
 1. **`server/types/bot.types.ts`**
    - Berisi semua deklarasi `interface` (`CommandsConfig`, `WhatsAppButton`, `ProductVariantItem`, `LogEntry`) dan `type` (`BotStatus`, `WhatsAppButtonType`).
-   - Menyimpan konstanta global seperti `ALLOWED_PREFIXES` (`/`, `.`, `!`, `?`, `#`, `$`, `%`, `&`), `DEFAULT_CUSTOM_CODE` (`WANZTSTR`), dan nama direktori sesi.
+   - Menyimpan konstanta global seperti `ALLOWED_PREFIXES` (`/`, `.`, `!`, `?`, `#`, `$`, `%`, `&`), `DEFAULT_CUSTOM_CODE` (string kosong), dan nama direktori sesi.
 
 2. **`server/config/configManager.ts`**
    - Menangani pembacaan dan penulisan konfigurasi bot ke `commands_config.json`.
@@ -205,16 +205,36 @@ Buka browser dan akses dashboard di:
 
 ## 📲 Cara Menautkan Bot ke WhatsApp
 
-1. Buka dashboard di browser.
-2. Pada panel **WhatsApp Connection**, masukkan nomor WhatsApp target Anda (contoh: `85712439395`).
-3. Tentukan 8 karakter alfanumerik custom pairing code (contoh: `WANZTSTR`).
-4. Klik tombol **[Minta Kode Pairing]**.
+1. Buka dashboard di browser (`http://localhost:3000`).
+2. Pada panel **WhatsApp Connection**, masukkan nomor WhatsApp target Anda (contoh: `81234567890`).
+3. Masukkan **8 karakter alfanumerik** custom pairing code (hanya huruf & angka tanpa simbol/spasi).
+   - Kolom ini defaultnya kosong dan wajib diisi.
+   - Tombol **[Minta Kode Pairing]** akan berwarna abu-abu dan dinonaktifkan sampai Anda menginput tepat 8 karakter valid.
+4. Klik tombol **[Minta Kode Pairing]** (berubah menjadi biru saat valid).
 5. Buka aplikasi WhatsApp di HP Anda:
    - Masuk ke menu **Titik Tiga** (Android) atau **Pengaturan** (iOS).
    - Pilih **Perangkat Tertaut** > **Tautkan Perangkat**.
    - Pilih opsi teks: *"Tautkan dengan nomor telepon saja"*.
    - Masukkan 8 karakter kode pairing yang tertera pada dashboard.
 6. Bot akan otomatis terverifikasi dan status dashboard berubah menjadi **CONNECTED**.
+
+---
+
+## 🧠 Struktur Dokumentasi & Manajemen Pengetahuan (`brain/`)
+
+Proyek ini menerapkan protokol pencatatan ketat berbasis 4 pilar di dalam folder `/brain/`:
+
+1. **`brain/idea.md`**  
+   Mencatat segala pengetahuan baru, hasil riset, referensi arsitektur, dan spesifikasi API eksternal (contoh: dokumentasi lengkap SairiPedia API QRIS Payment Gateway).
+2. **`brain/progress.md`**  
+   Mencatat seluruh riwayat perubahan, fitur yang telah diimplementasikan, dan changelog rilis.
+3. **`brain/langkah_implementasi.md`**  
+   Mencatat rencana teknis yang **akan dilakukan (belum dieksekusi)**, menjelaskan secara mendalam apa yang akan dilakukan dan bagaimana cara mengimplementasikannya secara rinci sebelum menyentuh kode.
+4. **`brain/schedule.md`**  
+   Mencatat perancangan, roadmap pengembangan, target milestone, dan log jadwal perencanaan.
+5. **`README.md`**  
+   Dokumentasi publik yang selalu disesuaikan dan diperbarui pada setiap perubahan sistem.
+
 
 ---
 

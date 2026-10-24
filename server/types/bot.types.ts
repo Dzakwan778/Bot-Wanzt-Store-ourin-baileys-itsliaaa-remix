@@ -1,4 +1,4 @@
-export const DEFAULT_CUSTOM_CODE = 'WANZTSTR';
+export const DEFAULT_CUSTOM_CODE = '';
 export const SESSION_DIR = 'session_ourin';
 export const CONFIG_FILE = 'commands_config.json';
 
