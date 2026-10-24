@@ -24,50 +24,38 @@ Setiap ada tugas atau fitur baru yang akan dikerjakan, susun dengan format berik
 
 ---
 
-## ⏳ Rencana Implementasi Aktif: Penambahan Saldo Payment Gateway (Sairi) pada StoreProfileHeader
+## ⏳ Rencana Implementasi Aktif: Perbaikan Tampilan & Data Tab Produk (Sesuai Screenshot Asli)
 
-### [Penambahan Saldo Payment Gateway (Sairi) di bawah Saldo Anda pada StoreProfileHeader]
+### [Perbaikan Tampilan Tabel & Pemetaan Varian Produk pada Tab Produk]
 1. **Tujuan & Deskripsi**:
-   - Menambahkan kotak/baris metrik **"Saldo Payment Gateway"** di komponen `StoreProfileHeader` (`src/components/layout/StoreProfileHeader.tsx`), tepat di bawah kotak "Saldo Anda" (yang menampilkan saldo Xaviera).
-   - Menghubungkan metrik ini dengan API SairiPedia (`/api/sairi/balance`) agar saldo akun merchant Sairi pengguna dapat dipantau langsung dari header profil toko.
-   - Memberikan tombol refresh instan untuk memperbarui saldo Sairi secara mandiri maupun sinkronisasi otomatis saat API Key Sairi disimpan.
-   - Jika API Key Sairi belum diisi, menampilkan tautan / status badge "Belum Diatur" yang dapat diklik untuk langsung mengarahkan pengguna ke Tab Connection.
+   - Memperbaiki tampilan tabel katalog pada **Tab Produk** (`src/components/tabs/TabProduk.tsx`) agar 100% identik dan presisi dengan tangkapan layar asli pengguna (`Screenshot_20261025-062602_f4b60c00.png`).
+   - Memperbaiki pemetaan data produk dari API Xaviera di `src/hooks/useXavieraData.ts` agar unroll (membongkar) setiap varian di dalam `product.variants` menjadi baris-baris varian dengan nama produk induk dan varian anak.
+   - Memastikan proxy `/api/xaviera/products` di `vite.config.ts` dapat menerima query parameter `?apikey=...` dan header Authorization dari klien, serta menyiapkan default API key yang valid di `database/api_config.json`.
+   - Mengubah struktur visual tabel:
+     - Menghilangkan container card abu-abu tebal (`border rounded-xl shadow-2xs`).
+     - Header `thead` transparan tanpa background banner `bg-slate-50`.
+     - Icon produk diletakkan langsung di samping nama produk tanpa bingkai kotak putih.
+     - Baris varian anak kedua dan seterusnya menampilkan `—— -` pada kolom NAMA.
+     - Badge stok: Hijau dengan titik (`• 20`) jika stok > 0, atau bingkai merah (`0`) jika stok kosong (0).
+     - Format harga asli: `Rp5.000` (tanpa spasi antara Rp dan angka).
+     - Format harga jual: `Rp5.500 (500)` dengan angka margin dalam pill hijau lembut.
+     - Menghapus footer kartu yang tidak ada di screenshot asli.
 
 2. **File Target**:
-   - `/src/types/dashboard.types.ts`: Memastikan `SairiBalanceState` terdefinisi dengan lengkap (`loading`, `configured`, `balance`, `error`).
-   - `/src/hooks/useSairiData.ts` (File Baru):
-     - Custom hook untuk mengelola state saldo Sairi (`sairiBalanceState`), fungsi `fetchSairiBalance()`, serta sinkronisasi otomatis saat `sairiApiKey` dan `sairiBaseUrl` berubah.
-   - `/src/components/layout/StoreProfileHeader.tsx`:
-     - Menambahkan props `sairiBalance: SairiBalanceState` dan `onRefreshSairi: () => void`.
-     - Mendesain elemen visual kotak "Saldo Payment Gateway" tepat di bawah "Saldo Anda" dengan icon QRIS/Wallet, badge emerald/hijau, formatting nominal Rupiah, tombol refresh putar, dan indikator status API.
-   - `/src/App.tsx`:
-     - Memanggil hook `useSairiData` dengan parameter `storeConfig.sairiApiKey` dan `storeConfig.sairiBaseUrl`.
-     - Meneruskan state `sairiData.sairiBalance` dan callback `sairiData.fetchSairiBalance` ke `StoreProfileHeader`.
+   - `/src/components/tabs/TabProduk.tsx`: Restrukturisasi desain tabel produk agar persis screenshot.
+   - `/src/hooks/useXavieraData.ts`: Unroll `variants` array saat parsing response `/api/xaviera/products` dan teruskan `apikey`.
+   - `/vite.config.ts`: Dukung `req.headers.authorization` & `query.apikey` pada endpoint `/api/xaviera/products`.
+   - `/database/api_config.json`: Isi default `xavieraApiKey` yang valid agar sinkronisasi langsung berfungsi.
 
 3. **Detail Rencana Implementasi (How-To)**:
-   - **Langkah 1: Pembuatan Hook `useSairiData.ts`**:
-     - Buat hook yang memanggil endpoint `/api/sairi/balance?apikey=...&baseurl=...`.
-     - Tangani status loading, error jika key salah, dan parsing angka balance.
-     - Tambahkan `useEffect` yang memicu fetch setiap kali `sairiApiKey` atau `sairiBaseUrl` diperbarui.
-   - **Langkah 2: Pembaruan Komponen `StoreProfileHeader.tsx`**:
-     - Update interface `StoreProfileHeaderProps`:
-       * `sairiBalance?: SairiBalanceState;`
-       * `onRefreshSairi?: () => void;`
-     - Di dalam kolom metrik kanan, tambahkan kotak metrik kedua dengan label `Saldo Payment Gateway` (icon `QrCode` / `CreditCard` warna emerald):
-       * Menampilkan nilai `Rp {sairiBalance.balance.toLocaleString('id-ID')}` saat terisi.
-       * Menampilkan tombol refresh `RefreshCw` khusus untuk Sairi.
-       * Jika `!sairiBalance.configured`, tampilkan tombol/teks clickable "Belum Diatur" yang memanggil `onNavigateToConnection()`.
-   - **Langkah 3: Integrasi di `App.tsx`**:
-     - Sambungkan hook `useSairiData` dan salurkan ke props `<StoreProfileHeader />`.
-   - **Langkah 4: Validasi & Dokumentasi**:
-     - Jalankan `compile_applet` dan `lint_applet`.
-     - Catat hasil implementasi di `brain/progress.md` dan `README.md`.
+   - **Langkah 1**: Perbarui `vite.config.ts` pada rute `/api/xaviera/products` untuk membaca `queryKey || authHeader || botManager.config.xavieraApiKey || DEFAULT_API_KEY`.
+   - **Langkah 2**: Perbarui `database/api_config.json` dengan API key Xaviera resmi `xvs_0726effe853aadea27bd6608ef98468cc3121b82e036e5f7`.
+   - **Langkah 3**: Perbarui `src/hooks/useXavieraData.ts` di fungsi `fetchXavieraProducts` untuk melakukan unrolling varian `item.variants` secara tepat.
+   - **Langkah 4**: Perbarui `src/components/tabs/TabProduk.tsx` dengan layout tabel minimalis, header transparan, icon inline, varian `—— -`, badge stok titik hijau vs kotak merah, format harga tanpa spasi, dan badge margin hijau.
+   - **Langkah 5**: Verifikasi dengan `compile_applet` dan `lint_applet`.
+   - **Langkah 6**: Perbarui `brain/progress.md` dan `README.md`.
 
 4. **Metode Validasi & Pengujian**:
-   - Membuka halaman dashboard dan mengecek tampilan StoreProfileHeader.
-   - Memastikan terdapat dua kotak saldo yang tertata rapi:
-     1. Saldo Anda (Xaviera Store)
-     2. Saldo Payment Gateway (SairiPedia QRIS)
-   - Menguji klik tombol refresh pada Saldo Payment Gateway untuk memastikan fetch berjalan.
-   - Menguji navigasi ke Tab Connection saat saldo belum diisi.
-
+   - Menjalankan `compile_applet` untuk memastikan TypeScript tidak error.
+   - Menjalankan `lint_applet` untuk memastikan ESLint lolos tanpa peringatan/error.
+   - Memastikan data Duolingo, Capcut, Gemini Ai, Canva Premium, Spotify terisi lengkap dengan varian masing-masing dan tata letak persis tangkapan layar.

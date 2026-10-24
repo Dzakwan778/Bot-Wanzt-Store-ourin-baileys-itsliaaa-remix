@@ -138,6 +138,7 @@ Untuk mempermudah pemeliharaan (*maintenance*) dan mencegah penumpukan ribuan ba
 │   └── botManager.ts              # Core controller / fasad soket (koneksi, auth, auto-reconnect, log)
 ├── src/
 │   ├── components/tabs/
+│   │   ├── TabProduk.tsx          # Tampilan katalog produk premium presisi tabel (nama, varian —— -, stok, harga asli, harga jual)
 │   │   └── TabConnection.tsx      # Form konfigurasi API Xaviera Store & Sairi Payment Gateway (QRIS)
 │   ├── App.tsx                    # Dashboard antarmuka web admin (React + Tailwind CSS)
 │   ├── main.tsx                   # Entry point aplikasi frontend

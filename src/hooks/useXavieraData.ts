@@ -90,7 +90,10 @@ export function useXavieraData(showToast: (msg: string) => void) {
   const fetchXavieraProducts = async () => {
     try {
       setLoadingProducts(true);
-      const res = await fetch('/api/xaviera/products');
+      const url = xavieraApiKey?.trim()
+        ? `/api/xaviera/products?apikey=${encodeURIComponent(xavieraApiKey.trim())}`
+        : '/api/xaviera/products';
+      const res = await fetch(url);
       if (res.ok) {
         const json = await res.json();
         if (json.success && json.data) {
@@ -98,15 +101,36 @@ export function useXavieraData(showToast: (msg: string) => void) {
             ? json.data
             : json.data.products || json.data.items || [];
           if (Array.isArray(rawItems) && rawItems.length > 0) {
-            const mapped: PremiumProduct[] = rawItems.map((item: any, idx: number) => ({
-              id: item.id || idx + 1,
-              name: item.name || item.title || item.product_name || 'Akun Premium',
-              variant: item.variant || item.type || item.durasi || '1 Bulan',
-              stock: item.stock !== undefined ? item.stock : 'Tersedia',
-              price: Number(item.price || item.harga || 0),
-              category: item.category || 'Premium Apps',
-              status: item.status || 'available',
-            }));
+            const mapped: PremiumProduct[] = [];
+            rawItems.forEach((item: any, pIdx: number) => {
+              const pName = (item.name || item.title || item.product_name || 'Akun Premium').trim();
+              const cat = item.category || 'Premium Apps';
+              if (item.hasVariants && Array.isArray(item.variants) && item.variants.length > 0) {
+                item.variants.forEach((v: any, vIdx: number) => {
+                  const stockNum = Number(v.stock);
+                  mapped.push({
+                    id: v.id || `${item.id || pIdx}-${vIdx}`,
+                    name: pName,
+                    variant: v.name || v.variant || 'Standard',
+                    stock: !isNaN(stockNum) ? stockNum : (v.stock || 0),
+                    price: Number(v.price || 0),
+                    category: cat,
+                    status: stockNum > 0 ? 'available' : 'empty',
+                  });
+                });
+              } else {
+                const stockNum = Number(item.stock);
+                mapped.push({
+                  id: item.id || pIdx + 1,
+                  name: pName,
+                  variant: item.variant || item.type || item.durasi || '1 Bulan',
+                  stock: !isNaN(stockNum) ? stockNum : (item.stock !== undefined ? item.stock : 0),
+                  price: Number(item.price || item.harga || 0),
+                  category: cat,
+                  status: item.status || (stockNum > 0 ? 'available' : 'empty'),
+                });
+              }
+            });
             setProductsList(mapped);
             return;
           }
@@ -237,15 +261,14 @@ export function useXavieraData(showToast: (msg: string) => void) {
 
   useEffect(() => {
     fetchXavieraProfile();
+    fetchXavieraProducts();
   }, [xavieraApiKey, xavieraBaseUrl]);
 
   useEffect(() => {
     if (xavieraApiKey && xavieraApiKey.trim()) {
-      fetchXavieraProducts();
       fetchXavieraSmm();
       fetchXavieraGames();
     } else {
-      setProductsList([]);
       setSmmList([]);
       setTopUpList([]);
     }

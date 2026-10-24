@@ -13,6 +13,27 @@ Dokumen ini mencatat seluruh riwayat perubahan dan pembaruan fitur yang telah se
 
 ## 📋 Catatan Riwayat Perubahan (Changelog)
 
+### [2026-10-24] - Perbaikan Tampilan & Data Tab Produk Sesuai Tangkapan Layar Asli
+- **Restrukturisasi Desain Tabel `TabProduk.tsx`**:
+  - Mengubah tampilan tabel agar 100% presisi dan identik dengan tangkapan layar pengguna (`Screenshot_20261025-062602_f4b60c00.png`).
+  - Menghapus container card abu-abu tebal (`border rounded-xl shadow-2xs`) dan footer kartu, beralih ke layout tabel minimalis yang bersih.
+  - Header tabel (`thead`) transparan tanpa background banner `bg-slate-50`.
+  - Icon produk (kubus isometrik `Box` warna sky blue) diletakkan langsung di samping nama produk tanpa kotak bingkai.
+  - Varian produk anak (kedua dan seterusnya) menampilkan indikator `—— -` pada kolom NAMA dengan warna muted `text-slate-300`.
+  - Badge stok:
+    - Jika stok > 0: Pill lembut dengan titik hijau dan angka stok (`• 20`).
+    - Jika stok === 0: Pill outlined merah dengan angka `0` (`text-rose-500 border-rose-300`).
+  - Format harga:
+    - Harga Asli: `Rp5.000` (tanpa spasi antara Rp dan angka).
+    - Harga Jual (+10%): `Rp5.500 (500)` dengan angka margin dalam pill hijau lembut bersudut halus.
+- **Unrolling Data Varian Produk (`useXavieraData.ts`)**:
+  - Memperbaiki parsing response dari Xaviera `/api/xaviera/products`: membongkar array `item.variants` menjadi baris-baris varian dengan nama induk produk (`Duolingo`, `Capcut`, `Gemini Ai`, `Canva Premium`, `Spotify`, dsb.) dan varian masing-masing.
+  - Meneruskan query parameter `?apikey=...` pada saat memanggil `/api/xaviera/products`.
+- **Dukungan Proxy API di `vite.config.ts`**:
+  - Mengizinkan `/api/xaviera/products` dan `/api/xaviera/profile` mengambil API key dari query parameter, header Authorization, konfigurasi bot, maupun default key resmi toko.
+- **Database `database/api_config.json`**:
+  - Memastikan API key Xaviera aktif tersimpan sehingga data produk langsung tersinkronisasi saat aplikasi dibuka.
+
 ### [2026-10-24] - Penambahan Saldo Payment Gateway (Sairi) pada StoreProfileHeader
 - **Komponen `StoreProfileHeader.tsx`**:
   - Menambahkan kotak metrik **"Saldo Payment Gateway"** tepat di bawah kotak "Saldo Anda" (Xaviera).

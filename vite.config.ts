@@ -87,13 +87,16 @@ export default defineConfig(() => {
 
             if (req.url?.startsWith('/api/xaviera/profile')) {
               res.setHeader('Content-Type', 'application/json');
-              const apiKey = botManager.config.xavieraApiKey?.trim();
-              const baseUrl = (botManager.config.xavieraBaseUrl?.trim() || 'https://xavierastore.com/api/v1').replace(/\/+$/, '');
+              const urlObj = new URL(req.url || '', 'http://localhost');
+              const queryKey = urlObj.searchParams.get('apikey');
+              const authHeader = req.headers.authorization?.replace(/^Bearer\s+/i, '');
+              const apiKey = (queryKey || authHeader || botManager.config.xavieraApiKey || 'xvs_0726effe853aadea27bd6608ef98468cc3121b82e036e5f7')?.trim();
+              const baseUrl = (urlObj.searchParams.get('baseurl') || botManager.config.xavieraBaseUrl?.trim() || 'https://xavierastore.com/api/v1').replace(/\/+$/, '');
 
               if (!apiKey) {
                 res.end(JSON.stringify({
                   configured: false,
-                  message: 'API Key belum diisi di tab06'
+                  message: 'API Key belum diisi di tab Connection'
                 }));
                 return;
               }
@@ -136,8 +139,11 @@ export default defineConfig(() => {
 
             if (req.url?.startsWith('/api/xaviera/products')) {
               res.setHeader('Content-Type', 'application/json');
-              const apiKey = botManager.config.xavieraApiKey?.trim();
-              const baseUrl = (botManager.config.xavieraBaseUrl?.trim() || 'https://xavierastore.com/api/v1').replace(/\/+$/, '');
+              const urlObj = new URL(req.url || '', 'http://localhost');
+              const queryKey = urlObj.searchParams.get('apikey');
+              const authHeader = req.headers.authorization?.replace(/^Bearer\s+/i, '');
+              const apiKey = (queryKey || authHeader || botManager.config.xavieraApiKey || 'xvs_0726effe853aadea27bd6608ef98468cc3121b82e036e5f7')?.trim();
+              const baseUrl = (urlObj.searchParams.get('baseurl') || botManager.config.xavieraBaseUrl?.trim() || 'https://xavierastore.com/api/v1').replace(/\/+$/, '');
 
               if (!apiKey) {
                 res.end(JSON.stringify({
