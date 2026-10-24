@@ -1,5 +1,5 @@
 import { useState, FormEvent } from 'react';
-import { WhatsAppButton, WhatsAppButtonType } from '../types/dashboard.types';
+import { WhatsAppButton, WhatsAppButtonType, QuickReplyTriggerAction } from '../types/dashboard.types';
 
 export function useButtonModal(
   menuButtons: WhatsAppButton[],
@@ -14,7 +14,7 @@ export function useButtonModal(
 
   // Dedicated inputs per type
   const [quickReplyOutput, setQuickReplyOutput] = useState('');
-  const [quickReplyAction, setQuickReplyAction] = useState<'list' | 'unknown'>('unknown');
+  const [quickReplyAction, setQuickReplyAction] = useState<QuickReplyTriggerAction>('unknown');
   const [urlOutput, setUrlOutput] = useState('https://');
   const [copyOutput, setCopyOutput] = useState('');
   const [reminderOutput, setReminderOutput] = useState('');

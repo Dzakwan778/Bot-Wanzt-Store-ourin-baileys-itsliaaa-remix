@@ -1,11 +1,13 @@
 import React from 'react';
-import { Store, BadgeCheck, Wallet, RefreshCw, AlertCircle } from 'lucide-react';
-import { StoreInfoConfig, XavieraProfileState } from '../../types/dashboard.types';
+import { Store, BadgeCheck, Wallet, RefreshCw, AlertCircle, QrCode } from 'lucide-react';
+import { StoreInfoConfig, XavieraProfileState, SairiBalanceState } from '../../types/dashboard.types';
 
 interface StoreProfileHeaderProps {
   storeInfo: StoreInfoConfig;
   xavieraProfile: XavieraProfileState;
+  sairiBalance?: SairiBalanceState;
   onRefreshProfile: () => void;
+  onRefreshSairi?: () => void;
   onNavigateToConnection: () => void;
   showToast: (msg: string) => void;
 }
@@ -13,7 +15,9 @@ interface StoreProfileHeaderProps {
 export const StoreProfileHeader: React.FC<StoreProfileHeaderProps> = ({
   storeInfo,
   xavieraProfile,
+  sairiBalance,
   onRefreshProfile,
+  onRefreshSairi,
   onNavigateToConnection,
   showToast,
 }) => {
@@ -47,41 +51,97 @@ export const StoreProfileHeader: React.FC<StoreProfileHeaderProps> = ({
 
         {/* Sisi Kanan: Metrik Saldo & Status Akun */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 pt-4 lg:pt-0 border-t lg:border-t-0 border-slate-100">
-          {/* Kotak Metrik Saldo */}
-          <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 min-w-[200px]">
-            <div className="flex items-center justify-between gap-3 text-slate-500 mb-1">
-              <span className="text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1.5">
-                <Wallet className="w-3.5 h-3.5 text-slate-400" />
-                Saldo Anda
-              </span>
-              <button
-                type="button"
-                onClick={() => {
-                  onRefreshProfile();
-                  showToast('Menyinkronkan saldo Xaviera Store...');
-                }}
-                disabled={xavieraProfile.loading}
-                className="text-slate-400 hover:text-sky-600 transition cursor-pointer p-0.5 rounded"
-                title="Perbarui Saldo"
-              >
-                <RefreshCw className={`w-3.5 h-3.5 ${xavieraProfile.loading ? 'animate-spin text-sky-600' : ''}`} />
-              </button>
+          {/* Kolom Saldo: Saldo Anda (Xaviera) & Saldo Payment Gateway (Sairi) di bawahnya */}
+          <div className="flex flex-col gap-2.5 min-w-[210px]">
+            {/* 1. Kotak Saldo Anda (Xaviera Store) */}
+            <div className="bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 transition-all">
+              <div className="flex items-center justify-between gap-3 text-slate-500 mb-0.5">
+                <span className="text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1.5 text-slate-700">
+                  <Wallet className="w-3.5 h-3.5 text-sky-600" />
+                  Saldo Anda (Xaviera)
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onRefreshProfile();
+                    showToast('Menyinkronkan saldo Xaviera Store...');
+                  }}
+                  disabled={xavieraProfile.loading}
+                  className="text-slate-400 hover:text-sky-600 transition cursor-pointer p-0.5 rounded"
+                  title="Perbarui Saldo Xaviera"
+                >
+                  <RefreshCw className={`w-3 h-3 ${xavieraProfile.loading ? 'animate-spin text-sky-600' : ''}`} />
+                </button>
+              </div>
+              <div className="font-mono font-bold text-base sm:text-lg text-slate-900 tracking-tight">
+                {xavieraProfile.loading ? (
+                  <span className="text-xs text-slate-400 font-normal">Memuat saldo...</span>
+                ) : xavieraProfile.data?.balance !== undefined ? (
+                  typeof xavieraProfile.data.balance === 'number'
+                    ? `Rp ${Number(xavieraProfile.data.balance).toLocaleString('id-ID')}`
+                    : `Rp ${xavieraProfile.data.balance}`
+                ) : (
+                  'Rp 0'
+                )}
+              </div>
             </div>
-            <div className="font-mono font-bold text-xl sm:text-2xl text-slate-900 tracking-tight">
-              {xavieraProfile.loading ? (
-                <span className="text-xs text-slate-400 font-normal">Memuat saldo...</span>
-              ) : xavieraProfile.data?.balance !== undefined ? (
-                typeof xavieraProfile.data.balance === 'number'
-                  ? `Rp ${Number(xavieraProfile.data.balance).toLocaleString('id-ID')}`
-                  : `Rp ${xavieraProfile.data.balance}`
-              ) : (
-                'Rp 0'
-              )}
+
+            {/* 2. Kotak Saldo Payment Gateway (Sairi) tepat di bawah Saldo Anda */}
+            <div className="bg-emerald-50/50 border border-emerald-200/80 rounded-lg px-3.5 py-2 transition-all">
+              <div className="flex items-center justify-between gap-3 text-slate-500 mb-0.5">
+                <span className="text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1.5 text-emerald-800">
+                  <QrCode className="w-3.5 h-3.5 text-emerald-600" />
+                  Saldo Payment Gateway
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onRefreshSairi) {
+                      onRefreshSairi();
+                    } else {
+                      showToast('Menyinkronkan saldo Sairi...');
+                    }
+                  }}
+                  disabled={sairiBalance?.loading}
+                  className="text-emerald-500 hover:text-emerald-700 transition cursor-pointer p-0.5 rounded"
+                  title="Perbarui Saldo Sairi"
+                >
+                  <RefreshCw className={`w-3 h-3 ${sairiBalance?.loading ? 'animate-spin text-emerald-600' : ''}`} />
+                </button>
+              </div>
+              <div className="flex items-baseline justify-between gap-2">
+                <div className="font-mono font-bold text-base sm:text-lg text-emerald-950 tracking-tight">
+                  {sairiBalance?.loading ? (
+                    <span className="text-xs text-emerald-600 font-normal">Memuat saldo...</span>
+                  ) : sairiBalance?.configured && sairiBalance.balance !== null ? (
+                    `Rp ${Number(sairiBalance.balance).toLocaleString('id-ID')}`
+                  ) : sairiBalance?.error ? (
+                    <span
+                      onClick={onNavigateToConnection}
+                      className="text-xs text-rose-600 font-medium hover:underline cursor-pointer"
+                      title={sairiBalance.error}
+                    >
+                      Cek API Sairi
+                    </span>
+                  ) : (
+                    <span
+                      onClick={onNavigateToConnection}
+                      className="text-xs text-slate-400 font-medium hover:text-emerald-700 hover:underline cursor-pointer"
+                      title="Atur API Key Sairi di tab Connection"
+                    >
+                      Belum Diatur
+                    </span>
+                  )}
+                </div>
+                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.2 rounded font-sans shrink-0">
+                  Sairi
+                </span>
+              </div>
             </div>
           </div>
 
           {/* Status Akun & Role Badge */}
-          <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 flex flex-col justify-between min-w-[150px]">
+          <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 flex flex-col justify-between min-w-[150px] self-stretch">
             <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Status Akun
             </div>

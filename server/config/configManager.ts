@@ -68,6 +68,8 @@ export const DEFAULT_CAROUSEL_CONFIG: CarouselCommandConfig = {
 export const DEFAULT_API_CONFIG: ApiConfig = {
   xavieraApiKey: 'xvs_0726effe853aadea27bd6608ef98468cc3121b82e036e5f7',
   xavieraBaseUrl: 'https://xavierastore.com/api/v1',
+  sairiApiKey: '',
+  sairiBaseUrl: 'https://api.sairibot.my.id',
 };
 
 export const DEFAULT_CONFIG: CommandsConfig = {
@@ -84,6 +86,8 @@ export const DEFAULT_CONFIG: CommandsConfig = {
   carouselPicture: DEFAULT_CAROUSEL_CONFIG.carouselPicture,
   xavieraApiKey: DEFAULT_API_CONFIG.xavieraApiKey,
   xavieraBaseUrl: DEFAULT_API_CONFIG.xavieraBaseUrl,
+  sairiApiKey: DEFAULT_API_CONFIG.sairiApiKey,
+  sairiBaseUrl: DEFAULT_API_CONFIG.sairiBaseUrl,
 };
 
 function ensureDbDir() {
@@ -177,6 +181,8 @@ function migrateLegacyConfigIfNeeded() {
     const apiConfig: ApiConfig = {
       xavieraApiKey: legacyData.xavieraApiKey !== undefined ? legacyData.xavieraApiKey : DEFAULT_API_CONFIG.xavieraApiKey,
       xavieraBaseUrl: legacyData.xavieraBaseUrl || DEFAULT_API_CONFIG.xavieraBaseUrl,
+      sairiApiKey: legacyData.sairiApiKey !== undefined ? legacyData.sairiApiKey : DEFAULT_API_CONFIG.sairiApiKey,
+      sairiBaseUrl: legacyData.sairiBaseUrl || DEFAULT_API_CONFIG.sairiBaseUrl,
     };
     writeJsonFile(DB_FILES.api, apiConfig);
   }
@@ -270,6 +276,8 @@ export function loadCommandsConfig(): CommandsConfig {
     carouselPicture: carousel.carouselPicture,
     xavieraApiKey: api.xavieraApiKey,
     xavieraBaseUrl: api.xavieraBaseUrl,
+    sairiApiKey: api.sairiApiKey !== undefined ? api.sairiApiKey : DEFAULT_API_CONFIG.sairiApiKey,
+    sairiBaseUrl: api.sairiBaseUrl || DEFAULT_API_CONFIG.sairiBaseUrl,
   };
 }
 
@@ -326,10 +334,17 @@ export function saveCommandsConfig(
   }
 
   // 5. Simpan ke database/api_config.json jika ada data API
-  if (newConfig.xavieraApiKey !== undefined || newConfig.xavieraBaseUrl !== undefined) {
+  if (
+    newConfig.xavieraApiKey !== undefined ||
+    newConfig.xavieraBaseUrl !== undefined ||
+    newConfig.sairiApiKey !== undefined ||
+    newConfig.sairiBaseUrl !== undefined
+  ) {
     saveApiConfig({
       ...(newConfig.xavieraApiKey !== undefined && { xavieraApiKey: newConfig.xavieraApiKey }),
       ...(newConfig.xavieraBaseUrl !== undefined && { xavieraBaseUrl: newConfig.xavieraBaseUrl }),
+      ...(newConfig.sairiApiKey !== undefined && { sairiApiKey: newConfig.sairiApiKey }),
+      ...(newConfig.sairiBaseUrl !== undefined && { sairiBaseUrl: newConfig.sairiBaseUrl }),
     });
   }
 

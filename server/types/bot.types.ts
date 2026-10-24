@@ -30,12 +30,14 @@ export type WhatsAppButtonType =
   | 'cta_reminder'
   | 'cta_cancel_reminder';
 
+export type QuickReplyTriggerAction = 'list' | 'menu' | 'owner' | 'admin' | 'unknown';
+
 export interface WhatsAppButton {
   id: string;
   type: WhatsAppButtonType;
   name: string;
   output: string;
-  triggerAction?: 'list' | 'menu' | 'unknown';
+  triggerAction?: QuickReplyTriggerAction;
   callTargetName?: string;
   callPhoneNumber?: string;
 }
@@ -82,6 +84,8 @@ export interface CarouselCommandConfig {
 export interface ApiConfig {
   xavieraApiKey: string;
   xavieraBaseUrl: string;
+  sairiApiKey?: string;
+  sairiBaseUrl?: string;
 }
 
 export interface CommandsConfig {
@@ -98,4 +102,7 @@ export interface CommandsConfig {
   carouselPicture?: string;
   xavieraApiKey?: string;
   xavieraBaseUrl?: string;
+  sairiApiKey?: string;
+  sairiBaseUrl?: string;
 }
+

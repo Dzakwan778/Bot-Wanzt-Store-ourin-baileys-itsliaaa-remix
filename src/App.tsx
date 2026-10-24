@@ -7,6 +7,7 @@ import { useXavieraData } from './hooks/useXavieraData';
 import { useWhatsAppGroups } from './hooks/useWhatsAppGroups';
 import { useStoreConfig } from './hooks/useStoreConfig';
 import { useButtonModal } from './hooks/useButtonModal';
+import { useSairiData } from './hooks/useSairiData';
 
 // Layout components
 import { Navbar } from './components/layout/Navbar';
@@ -37,7 +38,10 @@ export default function App() {
   // 2. Data & Pengaturan Toko (Store Info, Command Menu, List, Carousel, Media)
   const storeConfig = useStoreConfig(xaviera.xavieraApiKey, xaviera.xavieraBaseUrl, showToast);
 
-  // 3. Koneksi & Polling Socket WhatsApp Bot
+  // 3. Data & Saldo Payment Gateway SairiPedia API
+  const sairiData = useSairiData(storeConfig.sairiApiKey, storeConfig.sairiBaseUrl, showToast);
+
+  // 4. Koneksi & Polling Socket WhatsApp Bot
   const botConn = useBotConnection(
     showToast,
     storeConfig.loadInitialConfig,
@@ -47,10 +51,10 @@ export default function App() {
     }
   );
 
-  // 4. Whitelist Grup WhatsApp
+  // 5. Whitelist Grup WhatsApp
   const groupsData = useWhatsAppGroups(selectedTab, botConn.botData.status, showToast);
 
-  // 5. Modal Tambah & Edit Tombol WhatsApp Native Flow
+  // 6. Modal Tambah & Edit Tombol WhatsApp Native Flow
   const buttonModal = useButtonModal(
     storeConfig.menuButtons,
     storeConfig.setMenuButtons,
@@ -70,11 +74,13 @@ export default function App() {
 
       {/* Main Workspace */}
       <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 flex-1 space-y-6">
-        {/* 2. Profil Toko & Informasi Saldo Xaviera */}
+        {/* 2. Profil Toko & Informasi Saldo (Xaviera & Sairi Payment Gateway) */}
         <StoreProfileHeader
           storeInfo={storeConfig.storeInfo}
           xavieraProfile={xaviera.xavieraProfile}
+          sairiBalance={sairiData.sairiBalance}
           onRefreshProfile={xaviera.fetchXavieraProfile}
+          onRefreshSairi={() => sairiData.fetchSairiBalance(true)}
           onNavigateToConnection={() => setSelectedTab('Connection')}
           showToast={showToast}
         />

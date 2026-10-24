@@ -21,6 +21,10 @@ export function useStoreConfig(
     waLink: '',
   });
 
+  // Payment Gateway Sairi States
+  const [sairiApiKey, setSairiApiKey] = useState<string>('');
+  const [sairiBaseUrl, setSairiBaseUrl] = useState<string>('https://api.sairibot.my.id');
+
   // Footer States per Command
   const [menuFooterText, setMenuFooterText] = useState<string>('{webLink} • Otomatis');
   const [listFooterText, setListFooterText] = useState<string>('{webLink} • Pilih Produk');
@@ -73,6 +77,8 @@ export function useStoreConfig(
     if (config.menuFooterText) setMenuFooterText(config.menuFooterText);
     if (config.listFooterText) setListFooterText(config.listFooterText);
     if (config.carouselFooterText) setCarouselFooterText(config.carouselFooterText);
+    if (config.sairiApiKey !== undefined) setSairiApiKey(config.sairiApiKey);
+    if (config.sairiBaseUrl !== undefined) setSairiBaseUrl(config.sairiBaseUrl);
   };
 
   const syncConfigToServer = async (
@@ -88,7 +94,9 @@ export function useStoreConfig(
     newStoreInfo?: StoreInfoConfig,
     newMenuFooter?: string,
     newListFooter?: string,
-    newCarouselFooter?: string
+    newCarouselFooter?: string,
+    newSairiApiKey?: string,
+    newSairiBaseUrl?: string
   ) => {
     setIsSavingConfig(true);
     try {
@@ -106,6 +114,8 @@ export function useStoreConfig(
         carouselPicture,
         xavieraApiKey: newApiKey !== undefined ? newApiKey : xavieraApiKey,
         xavieraBaseUrl: newBaseUrl !== undefined ? newBaseUrl : xavieraBaseUrl,
+        sairiApiKey: newSairiApiKey !== undefined ? newSairiApiKey : sairiApiKey,
+        sairiBaseUrl: newSairiBaseUrl !== undefined ? newSairiBaseUrl : sairiBaseUrl,
       };
 
       if (firstArg && typeof firstArg === 'object' && !Array.isArray(firstArg)) {
@@ -124,6 +134,8 @@ export function useStoreConfig(
         if (newMenuFooter !== undefined) payload.menuFooterText = newMenuFooter;
         if (newListFooter !== undefined) payload.listFooterText = newListFooter;
         if (newCarouselFooter !== undefined) payload.carouselFooterText = newCarouselFooter;
+        if (newSairiApiKey !== undefined) payload.sairiApiKey = newSairiApiKey;
+        if (newSairiBaseUrl !== undefined) payload.sairiBaseUrl = newSairiBaseUrl;
       }
 
       await fetch('/api/bot/save-config', {
@@ -141,6 +153,10 @@ export function useStoreConfig(
   return {
     storeInfo,
     setStoreInfo,
+    sairiApiKey,
+    setSairiApiKey,
+    sairiBaseUrl,
+    setSairiBaseUrl,
     menuFooterText,
     setMenuFooterText,
     listFooterText,

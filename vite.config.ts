@@ -5,6 +5,7 @@ import fs from 'fs';
 import { defineConfig } from 'vite';
 
 import { botManager } from './server/botManager.ts';
+import { getSairiBalance } from './server/services/sairiService.ts';
 
 export default defineConfig(() => {
   return {
@@ -56,6 +57,32 @@ export default defineConfig(() => {
                 res.end('Not found');
                 return;
               }
+            }
+
+            if (req.url?.startsWith('/api/sairi/balance')) {
+              res.setHeader('Content-Type', 'application/json');
+              const urlObj = new URL(req.url, 'http://localhost');
+              const queryKey = urlObj.searchParams.get('apikey');
+              const queryBase = urlObj.searchParams.get('baseurl');
+
+              const apiKey = (queryKey || botManager.config.sairiApiKey || '').trim();
+              const baseUrl = (queryBase || botManager.config.sairiBaseUrl || 'https://api.sairibot.my.id').trim();
+
+              if (!apiKey) {
+                res.end(JSON.stringify({
+                  configured: false,
+                  success: false,
+                  message: 'API Key Sairi belum diisi'
+                }));
+                return;
+              }
+
+              const result = await getSairiBalance(apiKey, baseUrl);
+              res.end(JSON.stringify({
+                configured: true,
+                ...result
+              }));
+              return;
             }
 
             if (req.url?.startsWith('/api/xaviera/profile')) {

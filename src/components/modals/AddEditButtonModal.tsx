@@ -1,6 +1,6 @@
 import React, { FormEvent } from 'react';
 import { Pencil, Plus, X, ChevronDown, Check } from 'lucide-react';
-import { WhatsAppButtonType } from '../../types/dashboard.types';
+import { WhatsAppButtonType, QuickReplyTriggerAction } from '../../types/dashboard.types';
 
 interface AddEditButtonModalProps {
   isOpen: boolean;
@@ -10,8 +10,8 @@ interface AddEditButtonModalProps {
   setModalBtnType: (type: WhatsAppButtonType) => void;
   modalBtnName: string;
   setModalBtnName: (name: string) => void;
-  quickReplyAction: 'list' | 'unknown';
-  setQuickReplyAction: (act: 'list' | 'unknown') => void;
+  quickReplyAction: QuickReplyTriggerAction;
+  setQuickReplyAction: (act: QuickReplyTriggerAction) => void;
   quickReplyOutput: string;
   setQuickReplyOutput: React.Dispatch<React.SetStateAction<string>>;
   urlOutput: string;
@@ -136,23 +136,37 @@ export const AddEditButtonModal: React.FC<AddEditButtonModalProps> = ({
                     <select
                       value={quickReplyAction}
                       onChange={(e) => {
-                        const val = e.target.value as 'list' | 'unknown';
+                        const val = e.target.value as QuickReplyTriggerAction;
                         setQuickReplyAction(val);
-                        if (val === 'list' && !quickReplyOutput) {
+                        const isDefaultCmdOutput =
+                          !quickReplyOutput ||
+                          ['.list', '.owner', '.admin', '.menu'].includes(quickReplyOutput.trim());
+                        if (val === 'list' && isDefaultCmdOutput) {
                           setQuickReplyOutput('.list');
+                        } else if (val === 'owner' && isDefaultCmdOutput) {
+                          setQuickReplyOutput('.owner');
+                        } else if (val === 'admin' && isDefaultCmdOutput) {
+                          setQuickReplyOutput('.admin');
+                        } else if (val === 'menu' && isDefaultCmdOutput) {
+                          setQuickReplyOutput('.menu');
                         }
                       }}
                       className="w-full appearance-none bg-slate-50 border border-slate-300 rounded-lg px-3 py-2.5 pr-8 text-sm font-medium text-slate-900 focus:outline-none focus:bg-white focus:border-sky-600 focus:ring-2 focus:ring-sky-600/20 cursor-pointer shadow-2xs"
                     >
                       <option value="list">Command: List (Memicu pesan Command List)</option>
+                      <option value="owner">Command: Owner (Memicu Kontak Owner vCard)</option>
+                      <option value="admin">Command: Admin (Memicu Kontak Admin vCard)</option>
+                      <option value="menu">Command: Menu (Memicu pesan Command Menu)</option>
                       <option value="unknown">Unknown (Tidak memicu command apapun)</option>
                     </select>
                     <ChevronDown className="w-4 h-4 text-slate-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
                   <p className="text-[11px] text-slate-500 mt-1">
-                    {quickReplyAction === 'list'
-                      ? '⚡ Memilih "List" akan langsung memicu pesan Command List ketika tombol ditekan.'
-                      : '⚪ Memilih "Unknown" tidak akan memicu command apapun (hanya teks balasan biasa).'}
+                    {quickReplyAction === 'list' && '⚡ Memilih "List" akan langsung memicu pesan Command List ketika tombol ditekan.'}
+                    {quickReplyAction === 'owner' && '👑 Memilih "Owner" akan langsung mengirimkan kartu kontak (vCard) Owner dari tab Store Info.'}
+                    {quickReplyAction === 'admin' && '📞 Memilih "Admin" akan langsung mengirimkan kontak (vCard) Admin, atau info belum di-set jika kosong.'}
+                    {quickReplyAction === 'menu' && '📋 Memilih "Menu" akan langsung memicu pesan Command Menu.'}
+                    {quickReplyAction === 'unknown' && '⚪ Memilih "Unknown" tidak akan memicu command apapun (hanya teks balasan biasa).'}
                   </p>
                 </div>
 
@@ -179,7 +193,17 @@ export const AddEditButtonModal: React.FC<AddEditButtonModalProps> = ({
                     type="text"
                     value={quickReplyOutput}
                     onChange={(e) => setQuickReplyOutput(e.target.value)}
-                    placeholder={quickReplyAction === 'list' ? '.list' : 'Contoh: .katalog atau Saya ingin memesan di {storeName}'}
+                    placeholder={
+                      quickReplyAction === 'list'
+                        ? '.list'
+                        : quickReplyAction === 'owner'
+                        ? '.owner'
+                        : quickReplyAction === 'admin'
+                        ? '.admin'
+                        : quickReplyAction === 'menu'
+                        ? '.menu'
+                        : 'Contoh: .katalog atau Saya ingin memesan di {storeName}'
+                    }
                     className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-sky-600 focus:ring-2 focus:ring-sky-600/20 transition shadow-2xs"
                   />
                   <p className="text-[11px] text-slate-500 mt-1">

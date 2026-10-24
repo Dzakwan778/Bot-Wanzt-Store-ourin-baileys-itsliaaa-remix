@@ -338,10 +338,24 @@ export const TabCommand: React.FC<TabCommandProps> = ({
                                 className={`text-[10px] font-mono font-medium px-1.5 py-0.2 rounded border ${
                                   btn.triggerAction === 'list'
                                     ? 'bg-sky-50 text-sky-700 border-sky-200'
+                                    : btn.triggerAction === 'owner'
+                                    ? 'bg-amber-50 text-amber-700 border-amber-200'
+                                    : btn.triggerAction === 'admin'
+                                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                    : btn.triggerAction === 'menu'
+                                    ? 'bg-purple-50 text-purple-700 border-purple-200'
                                     : 'bg-slate-100 text-slate-600 border-slate-200'
                                 }`}
                               >
-                                {btn.triggerAction === 'list' ? '⚡ Command: List' : '⚪ Unknown'}
+                                {btn.triggerAction === 'list'
+                                  ? '⚡ Command: List'
+                                  : btn.triggerAction === 'owner'
+                                  ? '👑 Command: Owner'
+                                  : btn.triggerAction === 'admin'
+                                  ? '📞 Command: Admin'
+                                  : btn.triggerAction === 'menu'
+                                  ? '📋 Command: Menu'
+                                  : '⚪ Unknown'}
                               </span>
                             )}
                           </div>

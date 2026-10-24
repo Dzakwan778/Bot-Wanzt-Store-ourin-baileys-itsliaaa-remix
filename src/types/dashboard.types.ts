@@ -36,12 +36,14 @@ export interface StoreInfoConfig {
   waLink?: string;
 }
 
+export type QuickReplyTriggerAction = 'list' | 'menu' | 'owner' | 'admin' | 'unknown';
+
 export interface WhatsAppButton {
   id: string;
   type: WhatsAppButtonType;
   name: string;
   output: string;
-  triggerAction?: 'list' | 'unknown';
+  triggerAction?: QuickReplyTriggerAction;
   callTargetName?: string;
   callPhoneNumber?: string;
 }
@@ -112,6 +114,14 @@ export interface XavieraProfileState {
   error: string | null;
   configured: boolean;
 }
+
+export interface SairiBalanceState {
+  loading: boolean;
+  configured: boolean;
+  balance: number | null;
+  error: string | null;
+}
+
 
 export const detectSmmPlatform = (categoryName: string = '', serviceName: string = ''): string => {
   const combined = `${categoryName} ${serviceName}`.toLowerCase();
